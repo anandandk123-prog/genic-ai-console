@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genic AI Command Console - NexasVerse Inc</title>
+    <script src="https://tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0b0f19; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
+        @keyframes pulse-glow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        .loading-pulse { animation: pulse-glow 1.5s infinite; }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100 font-sans h-screen flex overflow-hidden">
+
+    <!-- 1. STABLE SIDEBAR NAVIGATION CONTROL -->
+    <aside class="w-66 bg-gray-900 border-r border-gray-800 flex flex-col justify-between shrink-0 hidden md:flex">
+        <div>
+            
+            <div class="p-6 border-b border-gray-800 flex items-center space-x-3">
+                <div class="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-500/20">G</div>
+                <div>
+                    <h2 class="font-bold text-sm text-white tracking-wide">Genic AI</h2>
+                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">NexasVerse Inc</span>
+                </div>
+            </div>
+            
+            <!-- Application Workspace Navigation Nodes -->
+            <nav class="p-4 space-y-1">
+                <button onclick="switchTab('tab-chat')" id="btn-tab-chat" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-200 bg-blue-600/10 text-blue-400 border border-blue-500/20">
+                    <i class="fa-solid fa-message text-base"></i>
+                    <span>Genic Core Assistant</span>
+                </button>
+                <button onclick="switchTab('tab-codex')" id="btn-tab-codex" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-200 text-gray-400 hover:bg-gray-800/50 hover:text-gray-200">
+                    <i class="fa-solid fa-code text-base"></i>
+                    <span>Cera CodeX Engine</span>
+                </button>
+                <button onclick="switchTab('tab-flowpost')" id="btn-tab-flowpost" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-200 text-gray-400 hover:bg-gray-800/50 hover:text-gray-200">
+                    <i class="fa-solid fa-wand-magic-sparkles text-base"></i>
+                    <span>FlowPost Studio</span>
+                </button>
+            </nav>
+        </div>
+        
+        <!-- Environment Footer Diagnostics -->
+        <div class="p-4 border-t border-gray-800 text-[11px] text-gray-500 bg-gray-950/40">
+            <div class="flex items-center space-x-2 text-green-400 font-medium mb-1">
+                <span class="h-1.5 w-1.5 rounded-full bg-green-500 animate-ping"></span>
+                <span>System Environment Stable</span>
+            </div>
+            <p>Infrastructure: Serverless Free Tier</p>
+        </div>
+    </aside>
+
+    <!-- 2. MAIN TERMINAL WORKSPACE PANEL -->
+    <main class="flex-1 flex flex-col h-full bg-gray-950 overflow-hidden relative">
+        
+        <!-- Workspace Navbar Header -->
+        <header class="h-16 border-b border-gray-900 bg-gray-900/30 flex items-center justify-between px-6 shrink-0">
+            <h2 id="workspace-title" class="font-bold text-sm tracking-wide text-gray-200 uppercase">Genic Core Assistant</h2>
+            <div class="text-xs text-gray-400 bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-lg font-mono">
+                Model: Open-Inference Gateway
+            </div>
+        </header>
+
+        <!-- Dynamic Container Views Wrapper -->
+        <div class="flex-1 overflow-hidden relative">
+
+            <!-- TAB A: GENIC CHAT LAYER -->
+            <div id="tab-chat" class="tab-content absolute inset-0 flex flex-col bg-gray-950">
+                <div id="chat-feed" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                    <div class="bg-gray-900/40 border border-gray-800/60 p-5 rounded-2xl max-w-2xl mx-auto shadow-xl">
+                        <h4 class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">Core Assistant Standby</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Ask Genic AI anything. It has access to conversational networks to draft text, solve logical scenarios, or break down structures across your ecosystem.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB B: CERA CODEX LAYER -->
+            <div id="tab-codex" class="tab-content absolute inset-0 flex flex-col bg-gray-950 hidden">
+                <div id="codex-feed" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                    <div class="bg-gray-900/40 border border-gray-800/60 p-5 rounded-2xl max-w-2xl mx-auto shadow-xl">
+                        <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">CodeX Pipeline Active</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Describe software modules. CodeX enforces strict software engineering architectures and outputs clean coding script panels automatically.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB C: FLOWPOST STUDIO LAYER (IMAGE CREATION GENERATOR) -->
+            <div id="tab-flowpost" class="tab-content absolute inset-0 flex flex-col bg-gray-950 hidden">
+                <div id="flowpost-feed" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                    <div class="bg-gray-900/40 border border-gray-800/60 p-5 rounded-2xl max-w-2xl mx-auto shadow-xl">
+                        <h4 class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-1">FlowPost Studio & Luna AI</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Provide visual prompts to Luna. The studio outputs fully formed AI-generated images on the fly via a zero-cost public image-generation rendering engine.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Custom Costume Character Loading State Popup -->
+        <div id="studio-loading-state" class="hidden max-w-2xl mx-auto w-full px-6 py-3.5 mb-2 flex items-center space-x-4 bg-gray-900/60 border border-blue-900/30 rounded-xl mx-4">
+            <div class="h-10 w-10 rounded-lg bg-blue-600/10 flex items-center justify-center border border-blue-500/20 overflow-hidden shrink-0">
+                <!-- User Customization: Insert your image-generation character costume animation GIF URL inside the src below -->
+                <img id="costume-loading-gif" src="https://imgur.com" onerror="this.style.display='none'; document.getElementById('fallback-spinner').style.display='block';" class="h-full w-full object-cover">
+                <i id="fallback-spinner" class="fa-solid fa-circle-notch text-blue-400 animate-spin text-sm hidden"></i>
+            </div>
+            <div class="overflow-hidden">
+                <p id="loading-header-text" class="text-xs font-bold text-blue-400 tracking-wide uppercase">Genic AI Processing</p>
+                <p class="text-xs text-gray-400 loading-pulse truncate">Compiling model matrices and constructing asset stream arrays...</p>
+            </div>
+        </div>
+
+        <!-- 3. CONSOLIDATED CONSOLE INPUT CONTROLLER -->
+        <footer class="p-4 border-t border-gray-900 bg-gray-900/20 shrink-0">
+            <div class="max-w-2xl mx-auto relative flex items-center">
+                <input type="text" id="terminal-input" 
+                    class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-4 pr-12 py-3.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition text-gray-200 placeholder-gray-500"
+                    placeholder="Enter prompt commands to pass to the active workspace module...">
+                <button id="send-command-btn" onclick="executeWorkspaceTransaction()" 
+                    class="absolute right-2.5 p-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white transition duration-200 flex items-center justify-center">
+                    <i class="fa-solid fa-arrow-up-long px-0.5 text-xs"></i>
+                </button>
+            </div>
+        </footer>
+    </main>
+
+    <!-- 4. CORE APPLICATION PROCESS ENGINE SCRIPT -->
+    <script>
+        let currentActiveTab = 'tab-chat';
+
+        // Interface Input Command Listener
+        document.getElementById('terminal-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') executeWorkspaceTransaction();
+        });
+
+        // Tab View Switching Controller
+        function switchTab(targetTabId) {
+            currentActiveTab = targetTabId;
+            
+            // Hide all tab containers
+            document.querySelectorAll('.tab-content').forEach(element => element.classList.add('hidden'));
+            // Display targeted tab container
+            document.getElementById(targetTabId).classList.remove('hidden');
+
+            const menuButtons = {
+                'tab-chat': { btnId: 'btn-tab-chat', title: 'Genic Core Assistant', themeColor: 'text-blue-400', activeClass: 'bg-blue-600/10' },
+                'tab-codex': { btnId: 'btn-tab-codex', title: 'Cera CodeX Engine', themeColor: 'text-emerald-400', activeClass: 'bg-emerald-600/10' },
